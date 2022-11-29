@@ -96,12 +96,13 @@ main(int argc, char *argv[])
 
         /* Process all of the events in buffer returned by read() */
 
-        for (p = buf; p < buf + numRead; ) {
-            event = (struct inotify_event *) p;
+        for (char *p = buf; p < buf + numRead;) {
+            struct inotify_event *const event = (struct inotify_event *)p;
+            p+= sizeof(struct inotify_event);
+            printf("affact file name %s\n", (char *)p);
             displayInotifyEvent(event);
-
-            p += sizeof(struct inotify_event) + event->len;
-        }
+            p +=  event->len;
+        }   
     }
 
     exit(EXIT_SUCCESS);
